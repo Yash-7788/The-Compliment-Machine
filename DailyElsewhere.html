@@ -1,0 +1,2563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Daily Elsewhere</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Cinzel:wght@400;600;700;900&display=swap"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    /* ════════════════════════════════════════════════════
+   ROOT VARIABLES — from current file
+════════════════════════════════════════════════════ */
+    :root {
+      --paper: #f4e8c6;
+      --paper-mid: #e6d4a4;
+      --paper-d: #e3d5b0;
+      --ink: #18080a;
+      --ink-mid: #3a2010;
+      --ink-lt: #7a5838;
+      --rule: #a08060;
+      --red: #8A1C1C;
+      --gold: #8B6B14;
+      --hr: #8b0000;
+      --hrc: #4a0000;
+      --hrtext: #ffd8c8;
+      --rr: #a03050;
+      --rrc: #6a1020;
+      --rrtext: #ffe4ec;
+      --sr: #0e2a5c;
+      --src: #041428;
+      --srtext: #c8dcff;
+      --fr: #b06400;
+      --frc: #6a3800;
+      --frtext: #fff4c0;
+      --bg: #060402;
+    }
+
+    /* ════════════════════════════════════════════════════
+   RESET & BASE
+════════════════════════════════════════════════════ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Libre Baskerville', Georgia, serif
+    }
+
+    /* ════════════════════════════════════════════════════
+   BACKGROUND — from old file
+════════════════════════════════════════════════════ */
+    body {
+      background: var(--bg);
+      transition: background 2.5s ease;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(ellipse 55% 65% at 12% 88%, rgba(100, 50, 8, .22), transparent 100%),
+        radial-gradient(ellipse 45% 55% at 88% 12%, rgba(80, 40, 6, .18), transparent 100%)
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: repeating-linear-gradient(88deg, transparent 0, transparent 18px, rgba(255, 180, 60, .005) 18px, rgba(255, 180, 60, .005) 19px)
+    }
+
+    /* ── CANDLELIGHT GLOWS ── */
+    .glow {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: cf 5s ease-in-out infinite
+    }
+
+    .ga {
+      width: 220px;
+      height: 220px;
+      bottom: 6%;
+      left: 3%;
+      background: radial-gradient(rgba(255, 140, 25, .1), transparent 70%);
+      animation-delay: .7s
+    }
+
+    .gb {
+      width: 160px;
+      height: 160px;
+      top: 10%;
+      right: 5%;
+      background: radial-gradient(rgba(255, 120, 18, .08), transparent 70%)
+    }
+
+    .gc {
+      width: 100px;
+      height: 100px;
+      top: 55%;
+      left: 55%;
+      background: radial-gradient(rgba(255, 160, 30, .06), transparent 70%);
+      animation-delay: 2s
+    }
+
+    @keyframes cf {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1
+      }
+
+      30% {
+        transform: scale(1.12);
+        opacity: .82
+      }
+
+      65% {
+        transform: scale(.9);
+        opacity: 1.1
+      }
+    }
+
+    /* ── ATMOSPHERE PARTICLE LAYER ── */
+    #atm {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    /* ── DUST ── */
+    .dust {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: dft linear infinite
+    }
+
+    @keyframes dft {
+      0% {
+        transform: translateY(0) translateX(0)
+      }
+
+      25% {
+        transform: translateY(-20px) translateX(9px)
+      }
+
+      50% {
+        transform: translateY(-38px) translateX(-5px)
+      }
+
+      75% {
+        transform: translateY(-20px) translateX(13px)
+      }
+
+      100% {
+        transform: translateY(0) translateX(0)
+      }
+    }
+
+    /* ── ATMOSPHERE KEYFRAMES ── */
+    @keyframes mist-float {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+        opacity: .25
+      }
+
+      33% {
+        transform: translate(25px, -18px) scale(1.15);
+        opacity: .5
+      }
+
+      66% {
+        transform: translate(-18px, 12px) scale(.9);
+        opacity: .35
+      }
+    }
+
+    @keyframes petal-fall {
+      0% {
+        top: -4%;
+        transform: translateX(0) rotate(0deg);
+        opacity: .65
+      }
+
+      100% {
+        top: 104%;
+        transform: translateX(var(--drift, 30px)) rotate(380deg);
+        opacity: 0
+      }
+    }
+
+    @keyframes star-twinkle {
+
+      0%,
+      100% {
+        opacity: .15
+      }
+
+      50% {
+        opacity: .95
+      }
+    }
+
+    @keyframes confetti-fall {
+      0% {
+        top: -3%;
+        transform: translateX(0) rotate(0deg);
+        opacity: .8
+      }
+
+      100% {
+        top: 103%;
+        transform: translateX(var(--drift, 40px)) rotate(var(--rot, 360deg));
+        opacity: 0
+      }
+    }
+
+    /* ════════════════════════════════════════════════════
+   STAGE / CARD — from old file
+════════════════════════════════════════════════════ */
+    #stage {
+      position: relative;
+      z-index: 1;
+      perspective: 2600px;
+      perspective-origin: 50% 36%
+    }
+
+    #card {
+      transform-style: preserve-3d;
+      will-change: transform
+    }
+
+    .face {
+      width: min(930px, 96vw);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden
+    }
+
+    .face.back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateY(180deg)
+    }
+
+    /* ════════════════════════════════════════════════════
+   PAPER (front face) — current file design
+════════════════════════════════════════════════════ */
+    .paper {
+      width: 100%;
+      height: min(622px, calc(100vh - 118px));
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--paper);
+      position: relative;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .45), 0 2px 6px rgba(0, 0, 0, .22),
+        0 14px 36px rgba(0, 0, 0, .55), 0 48px 80px rgba(0, 0, 0, .45),
+        inset 0 0 60px rgba(0, 0, 0, .04);
+    }
+
+    /* paper grain */
+    .paper::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 200;
+      pointer-events: none;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, .012) 2px, rgba(0, 0, 0, .012) 3px),
+        repeating-linear-gradient(90deg, transparent, transparent 5px, rgba(0, 0, 0, .006) 5px, rgba(0, 0, 0, .006) 6px);
+    }
+
+    /* center fold */
+    .paper::after {
+      content: '';
+      position: absolute;
+      left: calc(50% - 2px);
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(90deg, transparent, rgba(0, 0, 0, .06) 35%, rgba(0, 0, 0, .15) 50%, rgba(0, 0, 0, .06) 65%, transparent);
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    /* ════════════════════════════════════════════════════
+   MASTHEAD — current file design
+════════════════════════════════════════════════════ */
+    .mast {
+      flex-shrink: 0;
+      background: var(--paper);
+      border-bottom: 3px double var(--ink);
+      padding: 0 22px;
+      z-index: 25;
+      position: relative;
+    }
+
+    .mast-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--rule);
+      padding: 4px 0 3px;
+      font-family: 'Cinzel', serif;
+      font-size: 8px;
+      letter-spacing: .1em;
+      color: var(--ink-lt);
+      text-transform: uppercase;
+    }
+
+    .mast-title {
+      text-align: center;
+      padding: 5px 0 3px;
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: clamp(32px, 5vw, 58px);
+      color: var(--ink);
+      line-height: 1;
+      letter-spacing: .03em;
+    }
+
+    .mast-sub {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 10px;
+      color: var(--ink-lt);
+      letter-spacing: .12em;
+      padding-bottom: 4px;
+    }
+
+    /* ════════════════════════════════════════════════════
+   TICKER
+════════════════════════════════════════════════════ */
+    .tick-wrap {
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'Cinzel', serif;
+      font-size: 8px;
+      letter-spacing: .1em;
+      overflow: hidden;
+      padding: 3px 0;
+      flex-shrink: 0;
+      white-space: nowrap;
+      z-index: 25;
+      position: relative;
+    }
+
+    .tick-inner {
+      display: inline-flex;
+      animation: tickScroll 50s linear infinite;
+    }
+
+    .tick-item {
+      padding: 0 32px;
+    }
+
+    @keyframes tickScroll {
+      from {
+        transform: translateX(0)
+      }
+
+      to {
+        transform: translateX(-50%)
+      }
+    }
+
+    /* ════════════════════════════════════════════════════
+   PAGE CONTENT — scrollable area
+════════════════════════════════════════════════════ */
+    .page-content {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-content::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .page-content::-webkit-scrollbar-track {
+      background: var(--paper-mid);
+    }
+
+    .page-content::-webkit-scrollbar-thumb {
+      background: var(--rule);
+    }
+
+    /* ════════════════════════════════════════════════════
+   FOOTER BAR
+════════════════════════════════════════════════════ */
+    .paper-foot {
+      flex-shrink: 0;
+      border-top: 2px solid var(--ink);
+      padding: 4px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Cinzel', serif;
+      font-size: 7px;
+      letter-spacing: .08em;
+      color: var(--ink-lt);
+      background: var(--paper);
+      z-index: 25;
+      position: relative;
+    }
+
+    .scroll-ind {
+      font-size: 7px;
+      color: var(--ink-lt);
+      opacity: .5;
+      animation: scHint 2s ease-in-out infinite;
+    }
+
+    @keyframes scHint {
+
+      0%,
+      100% {
+        opacity: .2
+      }
+
+      50% {
+        opacity: .55
+      }
+    }
+
+    /* ════════════════════════════════════════════════════
+   SECTION BANNER
+════════════════════════════════════════════════════ */
+    .sec-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 20px;
+      border-top: 2px solid;
+      border-bottom: 2px solid;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .sec-banner .r {
+      flex: 1;
+      height: 1px;
+      background: currentColor;
+      opacity: .4;
+    }
+
+    .sec-banner.hr {
+      background: var(--hr);
+      border-color: var(--hrc);
+      color: var(--hrtext);
+    }
+
+    .sec-banner.rr {
+      background: var(--rr);
+      border-color: var(--rrc);
+      color: var(--rrtext);
+    }
+
+    .sec-banner.sr {
+      background: var(--sr);
+      border-color: var(--src);
+      color: var(--srtext);
+    }
+
+    .sec-banner.fr {
+      background: var(--fr);
+      border-color: var(--frc);
+      color: var(--frtext);
+    }
+
+    /* ════════════════════════════════════════════════════
+   STORY ROWS
+════════════════════════════════════════════════════ */
+    .row {
+      display: grid;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .row.one {
+      grid-template-columns: 1fr;
+    }
+
+    .row.two {
+      grid-template-columns: 1fr 1px 1fr;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .vr {
+      width: 1px;
+      background: var(--rule);
+      margin: 12px 0;
+    }
+
+    /* ════════════════════════════════════════════════════
+   STORY
+════════════════════════════════════════════════════ */
+    .story {
+      padding: 14px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .story.feat {
+      padding: 16px 20px;
+    }
+
+    /* genre label */
+    .genre {
+      font-family: 'Cinzel', serif;
+      font-size: 7px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--gc, var(--ink-lt));
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .genre::before,
+    .genre::after {
+      content: '';
+      flex: 1;
+      height: .5px;
+      background: currentColor;
+      opacity: .45;
+    }
+
+    /* headline */
+    .hl {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.13;
+      margin-bottom: 5px;
+    }
+
+    .feat .hl {
+      font-size: clamp(16px, 2.2vw, 22px);
+    }
+
+    .row.two .hl {
+      font-size: clamp(12px, 1.5vw, 15px);
+    }
+
+    /* deck */
+    .deck {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 10.5px;
+      color: var(--ink-mid);
+      line-height: 1.45;
+      margin-bottom: 6px;
+    }
+
+    /* byline */
+    .byl {
+      font-family: 'Cinzel', serif;
+      font-size: 7px;
+      letter-spacing: .1em;
+      color: var(--ink-lt);
+      text-transform: uppercase;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 2px 0;
+      margin-bottom: 9px;
+    }
+
+    /* body */
+    .body {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 11px;
+      line-height: 1.7;
+      color: var(--ink-mid);
+      text-align: justify;
+      hyphens: auto;
+    }
+
+    .body p {
+      margin-bottom: 7px;
+    }
+
+    .body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* drop cap */
+    .feat .body p:first-child::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2em;
+      font-weight: 900;
+      line-height: .78;
+      float: left;
+      margin: 4px 5px 0 0;
+      color: var(--gc, var(--ink));
+    }
+
+    /* pull quote */
+    .pq {
+      border-left: 3px solid var(--gc, var(--rule));
+      margin: 8px 0;
+      padding: 5px 10px;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 10.5px;
+      color: var(--ink-mid);
+      background: rgba(0, 0, 0, .03);
+      line-height: 1.5;
+    }
+
+    /* genre color classes */
+    .gh {
+      --gc: var(--hr);
+    }
+
+    .gr {
+      --gc: var(--rr);
+    }
+
+    .gs {
+      --gc: var(--sr);
+    }
+
+    .gf {
+      --gc: var(--fr);
+    }
+
+    /* ════════════════════════════════════════════════════
+   PHOTO / SCENE FRAMES
+════════════════════════════════════════════════════ */
+    .photo {
+      float: right;
+      margin: 0 0 10px 14px;
+      border: 1px solid var(--rule);
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .feat .photo {
+      width: 130px;
+      height: 104px;
+    }
+
+    /* ── HORROR SCENE ── */
+    .sc-h {
+      background: #060101;
+      width: 130px;
+      height: 104px;
+    }
+
+    .sc-h .fog {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 100%, rgba(100, 0, 0, .5), transparent 65%);
+      animation: fogPulse 3.5s ease-in-out infinite;
+    }
+
+    @keyframes fogPulse {
+
+      0%,
+      100% {
+        opacity: .4;
+        transform: scaleY(1)
+      }
+
+      50% {
+        opacity: .9;
+        transform: scaleY(1.15)
+      }
+    }
+
+    .sc-h .eye {
+      position: absolute;
+      width: 5px;
+      height: 3.5px;
+      background: #e80000;
+      border-radius: 50%;
+      box-shadow: 0 0 7px 2px rgba(220, 0, 0, .8);
+      animation: eyeBlink 3.8s ease-in-out infinite;
+    }
+
+    .sc-h .e1 {
+      top: 38%;
+      left: 22%
+    }
+
+    .sc-h .e2 {
+      top: 35%;
+      left: 30%;
+      animation-delay: .15s
+    }
+
+    .sc-h .e3 {
+      top: 52%;
+      left: 58%;
+      animation-delay: 1.6s
+    }
+
+    .sc-h .e4 {
+      top: 49%;
+      left: 66%;
+      animation-delay: 1.75s
+    }
+
+    .sc-h .e5 {
+      top: 65%;
+      left: 42%;
+      animation-delay: 3s
+    }
+
+    .sc-h .e6 {
+      top: 62%;
+      left: 50%;
+      animation-delay: 3.15s
+    }
+
+    @keyframes eyeBlink {
+
+      0%,
+      44%,
+      56%,
+      100% {
+        opacity: 1
+      }
+
+      48%,
+      52% {
+        opacity: 0
+      }
+    }
+
+    /* ── ROMANCE SCENE ── */
+    .sc-r {
+      background: linear-gradient(160deg, #1c0510, #0e030a);
+      width: 130px;
+      height: 104px;
+    }
+
+    .sc-r .candle-body {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 22px;
+      background: linear-gradient(to top, #c09000, #e8c050);
+      border-radius: 4px 4px 0 0;
+    }
+
+    .sc-r .flame {
+      position: absolute;
+      bottom: 34px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 18px;
+      background: radial-gradient(ellipse at 50% 80%, #fff5c0, #ffb030 40%, rgba(255, 80, 0, .4) 80%, transparent);
+      border-radius: 50% 50% 30% 30%;
+      animation: flicker 1.4s ease-in-out infinite;
+      box-shadow: 0 0 14px 6px rgba(255, 140, 20, .35);
+    }
+
+    @keyframes flicker {
+
+      0%,
+      100% {
+        transform: translateX(-50%) scaleX(1) scaleY(1)
+      }
+
+      30% {
+        transform: translateX(-53%) scaleX(.88) scaleY(1.06)
+      }
+
+      60% {
+        transform: translateX(-47%) scaleX(1.12) scaleY(.94)
+      }
+    }
+
+    .sc-r .heart {
+      position: absolute;
+      font-size: 11px;
+      color: rgba(255, 120, 160, .75);
+      animation: heartRise 3s ease-out infinite;
+      bottom: 36px;
+    }
+
+    .sc-r .h1 {
+      left: 38%;
+      animation-delay: 0s
+    }
+
+    .sc-r .h2 {
+      left: 54%;
+      animation-delay: 1.1s
+    }
+
+    .sc-r .h3 {
+      left: 46%;
+      animation-delay: 2.2s
+    }
+
+    @keyframes heartRise {
+      0% {
+        transform: translateY(0) scale(.5);
+        opacity: .8
+      }
+
+      100% {
+        transform: translateY(-55px) scale(.15);
+        opacity: 0
+      }
+    }
+
+    /* ── SCIFI SCENE ── */
+    .sc-s {
+      background: #020510;
+      width: 130px;
+      height: 104px;
+    }
+
+    .sc-s .sstar {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      animation: sTwinkle var(--sd, 2s) var(--sdl, 0s) ease-in-out infinite;
+    }
+
+    @keyframes sTwinkle {
+
+      0%,
+      100% {
+        opacity: .15
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    .sc-s .planet {
+      position: absolute;
+      bottom: 14px;
+      right: 10px;
+      width: 28px;
+      height: 28px;
+      background: radial-gradient(circle at 35% 35%, #7098ff, #0a1e60);
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(80, 140, 255, .4);
+    }
+
+    .sc-s .ring {
+      position: absolute;
+      bottom: 22px;
+      right: 4px;
+      width: 42px;
+      height: 12px;
+      border: 1.5px solid rgba(140, 180, 255, .55);
+      border-radius: 50%;
+    }
+
+    .sc-s .shoot {
+      position: absolute;
+      width: 40px;
+      height: 1.5px;
+      background: linear-gradient(to right, transparent, rgba(200, 220, 255, .8));
+      animation: shootStar 5s ease-in-out infinite;
+      top: 18%;
+      left: -10%;
+    }
+
+    @keyframes shootStar {
+
+      0%,
+      80% {
+        opacity: 0
+      }
+
+      85% {
+        opacity: 1;
+        transform: translate(0, 0)
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(80px, 20px)
+      }
+    }
+
+    /* ── FUNNY SCENE ── */
+    .sc-f {
+      background: linear-gradient(140deg, #180e02, #0e0a02);
+      width: 130px;
+      height: 104px;
+    }
+
+    .sc-f .star-b {
+      position: absolute;
+      font-size: 18px;
+      animation: burst 2.2s ease-in-out infinite;
+    }
+
+    .sc-f .sb1 {
+      top: 18%;
+      left: 15%;
+      animation-delay: 0s;
+      font-size: 16px
+    }
+
+    .sc-f .sb2 {
+      top: 48%;
+      left: 55%;
+      animation-delay: .8s;
+      font-size: 20px
+    }
+
+    .sc-f .sb3 {
+      top: 22%;
+      left: 72%;
+      animation-delay: 1.6s;
+      font-size: 14px
+    }
+
+    .sc-f .cloud {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 22px;
+      background: rgba(255, 255, 200, .12);
+      border-radius: 20px;
+    }
+
+    .sc-f .cloud::before,
+    .sc-f .cloud::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 200, .12);
+      border-radius: 50%;
+    }
+
+    .sc-f .cloud::before {
+      width: 24px;
+      height: 24px;
+      top: -12px;
+      left: 8px
+    }
+
+    .sc-f .cloud::after {
+      width: 18px;
+      height: 18px;
+      top: -8px;
+      right: 8px
+    }
+
+    @keyframes burst {
+
+      0%,
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: .55
+      }
+
+      50% {
+        transform: scale(1.35) rotate(180deg);
+        opacity: 1
+      }
+    }
+
+    /* ════════════════════════════════════════════════════
+   BACK FACE — from old file
+════════════════════════════════════════════════════ */
+    .bkpaper {
+      width: 100%;
+      height: min(622px, calc(100vh - 118px));
+      background: var(--paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .45), 0 14px 36px rgba(0, 0, 0, .55);
+    }
+
+    .bkborder {
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(22, 16, 10, .18);
+      pointer-events: none;
+    }
+
+    .bkborder::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border: 1px solid rgba(22, 16, 10, .09);
+    }
+
+    .bkorn {
+      position: absolute;
+      font-size: 18px;
+      color: var(--ink);
+      opacity: .12;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .bkinner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 16px;
+    }
+
+    .bktitle {
+      font-family: 'UnifrakturMaguntia', cursive;
+      font-size: 54px;
+      color: var(--ink);
+      line-height: .98;
+      margin-bottom: 8px;
+    }
+
+    .bkrule {
+      width: 110px;
+      height: 5px;
+      border-top: 2px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      margin: 0 auto 12px;
+    }
+
+    .bkmsg {
+      font-family: 'Special Elite', monospace;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--ink-lt);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .bkednum {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 12px;
+      color: var(--ink-mid);
+      margin-bottom: 12px;
+    }
+
+    .bkspin {
+      font-size: 22px;
+      color: var(--red);
+      display: inline-block;
+      animation: spn .9s linear infinite;
+    }
+
+    @keyframes spn {
+      from {
+        transform: rotate(0)
+      }
+
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* ════════════════════════════════════════════════════
+   CONTROLS — from old file
+════════════════════════════════════════════════════ */
+    #controls {
+      margin-top: 10px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    #btnflip {
+      font-family: 'Cinzel', serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(237, 227, 200, .72);
+      background: transparent;
+      border: 1px solid rgba(237, 227, 200, .2);
+      padding: 7px 22px;
+      cursor: pointer;
+      transition: color .18s, border-color .18s;
+      outline: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #btnflip::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(237, 227, 200, .06);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .28s ease;
+    }
+
+    #btnflip:hover {
+      color: rgba(237, 227, 200, .95);
+      border-color: rgba(237, 227, 200, .48);
+    }
+
+    #btnflip:hover::before {
+      transform: scaleX(1);
+    }
+
+    #btnflip:active {
+      transform: scale(.97);
+    }
+
+    #btnflip:disabled {
+      opacity: .2;
+      cursor: not-allowed;
+    }
+
+    .edctr {
+      font-family: 'Special Elite', monospace;
+      font-size: 8px;
+      color: rgba(237, 227, 200, .25);
+      letter-spacing: 2px;
+    }
+
+    /* ════════════════════════════════════════════════════
+       UI & LOADER
+    ════════════════════════════════════════════════════ */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--paper-mid);
+      font-family: 'Cinzel', serif;
+      letter-spacing: .2em;
+      font-size: 14px;
+      transition: opacity 1s ease;
+    }
+
+    .load-spin {
+      font-size: 32px;
+      margin-bottom: 20px;
+      animation: spn 1.5s linear infinite;
+    }
+
+    #btn-enter {
+      margin-top: 25px;
+      background: transparent;
+      border: 1px solid var(--rule);
+      color: var(--paper-mid);
+      font-family: 'Cinzel', serif;
+      padding: 10px 22px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: all .3s;
+      letter-spacing: .15em;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    #btn-enter.ready {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #btn-enter:hover {
+      background: rgba(255, 255, 255, .05);
+      border-color: var(--paper-mid);
+    }
+
+    #vol-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: transparent;
+      border: 1px solid var(--rule);
+      color: var(--paper-mid);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s;
+      outline: none;
+      padding: 0;
+    }
+
+    #vol-btn:hover {
+      background: rgba(255, 255, 255, .05);
+    }
+
+    #vol-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    #vol-panel {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      z-index: 100;
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      padding: 16px 20px;
+      color: var(--paper-mid);
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, .6);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: all .3s ease;
+    }
+
+    #vol-panel.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .vol-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .vol-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .vol-row span {
+      width: 28px;
+    }
+
+    .vol-row input[type=range] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 90px;
+      height: 1px;
+      background: rgba(255, 255, 255, .2);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .vol-row input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--rule);
+      cursor: pointer;
+      transition: background .2s;
+    }
+
+    .vol-row input[type=range]::-webkit-slider-thumb:hover {
+      background: var(--paper-mid);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── LOADER ── -->
+  <div id="loader">
+    <div class="load-spin">✦</div>
+    <div id="load-text">Assembling Reality...</div>
+    <button id="btn-enter">Enter The Margins</button>
+  </div>
+
+  <!-- VOLUME UI -->
+  <button id="vol-btn">
+    <svg viewBox="0 0 24 24">
+      <path
+        d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+    </svg>
+  </button>
+  <div id="vol-panel">
+    <div class="vol-row"><span>sfx</span><input type="range" id="volSFX" min="0" max="1" step="0.01" value="0.8"></div>
+    <div class="vol-row"><span>amb</span><input type="range" id="volAmb" min="0" max="1" step="0.01" value="0.4"></div>
+  </div>
+
+  <!-- ── CANDLELIGHT GLOWS ── -->
+  <div class="glow ga"></div>
+  <div class="glow gb"></div>
+  <div class="glow gc"></div>
+
+  <!-- ── ATMOSPHERE PARTICLE LAYER ── -->
+  <div id="atm"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+     HIDDEN PAGE TEMPLATES — all 12 pages, no JS strings needed
+══════════════════════════════════════════════════════════════════ -->
+  <div id="pages" style="display:none">
+
+    <!-- PAGE 0 · HORROR FEATURED ─────────────────────── -->
+    <div data-page="0" data-sec="horror">
+      <div class="sec-banner hr">
+        <div class="r"></div><span>✦ &nbsp; Chronicles of Dread &nbsp; ✦</span>
+        <div class="r"></div>
+      </div>
+      <div class="row one">
+        <div class="story feat gh">
+          <div class="genre">Horror &nbsp;·&nbsp; Dateline Mortenwall</div>
+          <div class="photo sc-h">
+            <div class="fog"></div>
+            <div class="eye e1"></div>
+            <div class="eye e2"></div>
+            <div class="eye e3"></div>
+            <div class="eye e4"></div>
+            <div class="eye e5"></div>
+            <div class="eye e6"></div>
+          </div>
+          <h2 class="hl">THE VILLAGE OF MORTENWALL HAS BEEN WAKING EAST FOR NINETY-THREE CONSECUTIVE DAYS</h2>
+          <div class="deck">The geologist sent to investigate was found on day ninety — facing east, smiling in a manner
+            none of her colleagues had ever witnessed before.</div>
+          <div class="byl">By Elspeth Ravenwood · Mortenwall Correspondent · Virentis XIV</div>
+          <div class="body">
+            <p>Residents of Mortenwall — a village of four hundred souls on the grey edge of Sudenhollow Moor — have for
+              ninety-three mornings awakened in their beds facing due east, regardless of how they fell asleep. The
+              phenomenon was first noted by Greta Haas, sixty-two, an insomniac who is certain she fell asleep facing
+              south and woke with her nose pressed to the east-facing wall. "I thought I had walked in my sleep," she
+              told this correspondent. "Then my husband said the same thing had happened to him. Then my neighbor said
+              it. By Thursday we had stopped talking about it and just started facing east."</p>
+            <p>By the fortieth day, the village's church steeple — which has faced north for three hundred years — had
+              rotated. Its weathervane now points east regardless of wind direction. By day sixty-seven, the river
+              Holden, which has run westward through the valley since cartographers first recorded it, had quietly
+              changed its course.</p>
+            <div class="pq">"She was smiling," said the assistant who found Dr. Brennan in the field. "Not a smile I had
+              seen on her face before. Not a smile that had a reason I could name. Just east, and smiling, as if she had
+              been told something she had always half expected."</div>
+            <p>Dr. Maren Brennan, thirty-nine, geologist with the National Survey, arrived on day eighty-seven. Her
+              preliminary report was submitted on day eighty-nine. She was found at dawn on day ninety-one standing in
+              the field east of the church. She was facing east. She has not spoken of what she saw in the night between
+              those days. She says only that it was "perfectly clear." The village has not requested a replacement
+              investigator. When asked why, the mayor said: "We haven't been asked to stop."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 1 · HORROR TWO-COL (stories 2 & 3) ─────── -->
+    <div data-page="1" data-sec="horror">
+      <div class="sec-banner hr">
+        <div class="r"></div><span>✦ &nbsp; Chronicles of Dread — Continued &nbsp; ✦</span>
+        <div class="r"></div>
+      </div>
+      <div class="row two">
+        <div class="story gh">
+          <div class="genre">Horror &nbsp;·&nbsp; Obituaries Desk</div>
+          <h2 class="hl">WOMAN RECEIVES HER OWN OBITUARY — IT LISTS A MIDDLE NAME SHE HAS TOLD TO NO LIVING PERSON</h2>
+          <div class="deck">The newspaper has no record of printing it. An addendum arrived the following morning with a
+            correction to her daughter's name.</div>
+          <div class="byl">By Staff Correspondent · City Bureau</div>
+          <div class="body">
+            <p>Agnes Marlowe, sixty-seven, of the Colwick district, found a full-column obituary for herself in
+              Tuesday's edition of this newspaper. Her cause of death: unspecified. Her favourite song: correct — a
+              recording she has not played in forty years, had mentioned to no one, and had half-forgotten until she saw
+              it printed there. Her middle name — which she has shared with nobody since her mother died in 1991 — was
+              spelled without error. The funeral, the obituary said, would be "intimate, attended by the people who
+              mattered."</p>
+            <p>Mrs. Marlowe called our offices at eight-fifteen that morning. Our circulation staff found no record of
+              the submission. Our typesetter found no record of the layout. The archive copy of Tuesday's paper does not
+              contain the column.</p>
+            <p>The following morning, a slip of paper was found beneath her door in the typeface of our standard
+              corrections column. It corrected the spelling of her daughter's name. Mrs. Marlowe does not know when it
+              was delivered, nor by whom, nor how it came to know there had been a spelling error she had not reported.
+            </p>
+          </div>
+        </div>
+        <div class="vr"></div>
+        <div class="story gh">
+          <div class="genre">Horror &nbsp;·&nbsp; Domestic</div>
+          <h2 class="hl">MAN'S HANDWRITING TRANSFORMS OVERNIGHT INTO HIS DEAD FATHER'S — THE LIST ENDS: COME FIND ME,
+            WRITTEN THREE TIMES, SMALLER EACH TIME</h2>
+          <div class="byl">By Harlan Foss · Domestic Affairs</div>
+          <div class="body">
+            <p>Theodore Wren, fifty-one, of Ashburn Lane, wrote a grocery list Monday evening in his own hand: milk,
+              bread, candles, matches. He woke Tuesday to find it rewritten in handwriting he recognized immediately and
+              without question as his father's — dead seventeen years. The slightly rightward slant was identical to
+              letters his father had written to him during school. The unclosed lowercase e, which his father had never
+              corrected, was there as well.</p>
+            <p>Mr. Wren rewrote the list. He did not sleep well. Wednesday morning, the list had been altered again. The
+              original four items remained, in his father's hand. At the bottom, in progressively smaller script — as if
+              the author were becoming aware of diminishing space, or diminishing time — were three additions:</p>
+            <div class="pq"><em>come find me<br>come find me<br>come find me</em></div>
+            <p>Mr. Wren has purchased the grocery items. He has not acted on the additions. He reports that his own
+              handwriting has, in the days since, begun to tilt rightward. He has not told his family. He says this is
+              because there is not, as yet, anything to tell.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2 · HORROR TWO-COL (stories 4 & 5) ─────── -->
+    <div data-page="2" data-sec="horror">
+      <div class="sec-banner hr">
+        <div class="r"></div><span>✦ &nbsp; Chronicles of Dread — Concluded &nbsp; ✦</span>
+        <div class="r"></div>
+      </div>
+      <div class="row two">
+        <div class="story gh">
+          <div class="genre">Horror &nbsp;·&nbsp; Festival Report</div>
+          <h2 class="hl">HARROW'S EIGHTH ANNUAL FOG FESTIVAL WELCOMES TWELVE NEW STRANGERS — NONE OF THE ORIGINAL SEVEN
+            HAVE AGED SINCE 1948</h2>
+          <div class="byl">By Constance Vale · Harrow Bureau</div>
+          <div class="body">
+            <p>The town of Harrow, population eight hundred, has since October of 1948 welcomed seven strangers from the
+              autumn fog — one or two per decade, arriving from the direction of the moor, speaking in perfect local
+              dialect, knowing the residents' names without introduction, and unable to account for where they came
+              from. The welcome committee long ago stopped pressing the question.</p>
+            <p>What the committee has noted — and what the town physician has now certified in a document filed with the
+              county — is that none of the seven have aged since their arrival. The first, who gave his name as Ander,
+              appeared then to be approximately thirty years old. He appears thirty today. He works at the mill. He is
+              well-liked. He does not speak of the fog except to say he remembers it being warm.</p>
+            <p>This October, the fog arrived eleven days early. Twelve strangers walked out of it. The twelfth is, by
+              all accounts, not yet ready to be indoors. Each evening they stand at the eastern edge of the village and
+              face the moor. Ander has begun doing the same.</p>
+          </div>
+        </div>
+        <div class="vr"></div>
+        <div class="story gh">
+          <div class="genre">Horror &nbsp;·&nbsp; Science</div>
+          <h2 class="hl">CONFIRMED: THE SOUND AT THE OCEAN'S DEEPEST POINT IS LAUGHTER — REPEATING EVERY ELEVEN MINUTES,
+            UNDISTORTED BY PRESSURE</h2>
+          <div class="byl">By Dr. Iris Moll · Science Correspondent</div>
+          <div class="body">
+            <p>The hydrophone deployed at thirty-six thousand feet in the Vantherian Trench captured what NOAA initially
+              classified as geological resonance. The interval is precise: eleven minutes, zero seconds. The duration is
+              consistent: four-point-seven seconds per occurrence. Upon spectral analysis, the acoustic team confirmed —
+              and then confirmed again, using a second lab — that the sound is unmistakably human laughter.</p>
+            <p>It is not echoing. It is not distorted by the eleven thousand pounds per square inch of pressure at that
+              depth. It does not attenuate with distance. The laughter is: "the kind that follows something the laughing
+              party already knew."</p>
+            <div class="pq">"It is not frightened laughter," the report states in its final paragraph. "That is the part
+              that none of us can account for, and that all of us find, in different ways, the most difficult to set
+              aside at the end of the working day."</div>
+            <p>The hydrophone has been left in place. The laughter has not stopped. The interval has not varied by a
+              single second in fourteen months. No organism capable of producing such a sound is known to exist at that
+              depth. The recording has been played, at time of printing, forty-one million times.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 3 · ROMANCE FEATURED ───────────────────── -->
+    <div data-page="3" data-sec="romance">
+      <div class="sec-banner rr">
+        <div class="r"></div><span>❧ &nbsp; Affairs of the Heart &nbsp; ❧</span>
+        <div class="r"></div>
+      </div>
+      <div class="row one">
+        <div class="story feat gr">
+          <div class="genre">Romance &nbsp;·&nbsp; Timekeeping</div>
+          <div class="photo sc-r">
+            <div class="candle-body"></div>
+            <div class="flame"></div>
+            <div class="heart h1">♥</div>
+            <div class="heart h2">♥</div>
+            <div class="heart h3">♥</div>
+          </div>
+          <h2 class="hl">CLOCKMAKER SLOWED TIME ITSELF BY FOUR MINUTES FOR WIFE'S SIXTIETH BIRTHDAY — "ENOUGH FOR ONE
+            LAST DANCE TO A SONG THAT HAD ALREADY ENDED"</h2>
+          <div class="deck">He had made clocks for forty years. He had learned, in that time, how to make time itself
+            hesitate when something mattered enough to stay inside a moment a little longer.</div>
+          <div class="byl">By Aurelie Fontaine · Correspondence Desk · Virentis XIV</div>
+          <div class="body">
+            <p>Elan Voss, seventy-one, has spent his adult life in the company of time. Forty years of clocks — pocket
+              watches, parlour pieces, anniversary commissions from husbands who wanted one afternoon to go on a little
+              longer than it had any business lasting. He understood time the way a carpenter understands wood: where it
+              would hold, where it bent, and where, if you applied the right pressure in the right place, it would
+              yield.</p>
+            <p>For Mira's sixtieth birthday, he adjusted the clocks of their town by four minutes. Not all the clocks —
+              only the ones that governed their evening: the kitchen clock, the one in the square she passed on her walk
+              home, the small enamel piece on her dressing table that had belonged to her grandmother. Four minutes.
+              Enough for one more revolution around the sitting room to a song that had ended before either of them was
+              ready to stop moving. He had found the recording from their wedding night. He had kept it all this time
+              for exactly this kind of use.</p>
+            <div class="pq">"He played our song," Mira told this correspondent. "I didn't know where he'd found it — it
+              had been so long. We danced, and then the song ended, and we kept dancing for a little while anyway,
+              because the room was very warm and there was no reason to stop. I noticed the clock was wrong later. I
+              didn't mention it. He didn't either. That was the gift."</div>
+            <p>The record of the adjustment exists only in Elan's private logbook, in an entry written the following
+              morning beneath the date. It reads: <em>M. did not want to stop. I gave her four more minutes. I would
+                have given her four hundred years if I had worked out how.</em> He has left the logbook on his
+              workbench, open to that page, for the past three months. Mira has read it eleven times. She has not told
+              him this.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 4 · ROMANCE TWO-COL (stories 2 & 3) ────── -->
+    <div data-page="4" data-sec="romance">
+      <div class="sec-banner rr">
+        <div class="r"></div><span>❧ &nbsp; Affairs of the Heart — Continued &nbsp; ❧</span>
+        <div class="r"></div>
+      </div>
+      <div class="row two">
+        <div class="story gr">
+          <div class="genre">Romance &nbsp;·&nbsp; Literature</div>
+          <h2 class="hl">BOOKSHOP OWNER HID A LOVE LETTER ON PAGE 47 OF EVERY BOOK HE SOLD FOR THIRTY YEARS — FORTY-ONE
+            LETTERS HAVE NOW COME BACK</h2>
+          <div class="deck">He chose page forty-seven because that was how old she was when they first met, holding a
+            Chekhov in a shop that smelled of rain.</div>
+          <div class="byl">By Celeste Beaumont · Books &amp; Letters</div>
+          <div class="body">
+            <p>Augustin Beaumont ran his secondhand bookshop in the Marais quarter for thirty years, and in every book
+              he sold — every single one, through three decades and tens of thousands of volumes — he tucked a small
+              folded note on page forty-seven, addressed to his wife Celeste. The notes were never the same. Some were
+              passages he had underlined in other books. Some were memories: the specific sound of a Tuesday morning in
+              autumn, the way she laughed at things that weren't quite funny but almost. Some were only the sentence:
+              <em>I am still glad it was raining that afternoon.</em>
+            </p>
+            <p>When early dementia began taking Augustin's memory last spring, Celeste sat down with the shop's
+              thirty-year sales ledger and began writing to the addresses they had. Of the letters she sent, forty-one
+              have come back — each containing the note from page forty-seven, kept by people who found it and could not
+              throw it away. One man framed his and hung it above his wife's side of the bed. A woman in Lyon says she
+              has carried hers in her wallet since 1997.</p>
+            <p>Celeste reads the returned notes to Augustin in the evenings. Some days he does not know they are his.
+              Some days he listens and then laughs the way he used to, as if he has heard something very good for the
+              first time.</p>
+          </div>
+        </div>
+        <div class="vr"></div>
+        <div class="story gr">
+          <div class="genre">Romance &nbsp;·&nbsp; Botany</div>
+          <h2 class="hl">MAN SENDS ONE FLOWER EACH DAY FOR A YEAR — THE FINAL FLOWER IS AN EXTINCT SPECIES BORROWED FROM
+            KEW GARDENS</h2>
+          <div class="deck">By autumn she had learned a secret language. The last word: there are things that exist in
+            almost no quantity. You are one of them.</div>
+          <div class="byl">By Flora Strand · Society Pages</div>
+          <div class="body">
+            <p>Theo Marchetti sent Rosa one flower every morning for three hundred and sixty-five days. Each arrived
+              before eight a.m., with a small card naming the flower and its meaning in the Victorian language of
+              flowers — a system of communication once used by people who needed to say things that were not yet safe to
+              say aloud. Red chrysanthemum: <em>I love you.</em> White heather: <em>good luck.</em> Violet: <em>I think
+                of you always.</em> Fennel: <em>I am worthy of your praise</em> — which Rosa found audacious and wrote
+              back saying so, using a fern: <em>sincerity.</em></p>
+            <p>By September she was sending flowers back. He sent her a yellow tulip on a Thursday — <em>there is
+                sunshine in your smile</em> — and she pressed it until it turned translucent as onion skin, which she
+              told him was the most beautiful thing she'd done with a compliment.</p>
+            <p>On day three hundred and sixty-five, a white box arrived containing a Middlemist's Red — one of only
+              three remaining specimens of its species on Earth, on temporary loan from Kew Gardens. The card read:
+              <em>There are things in this world that exist in almost no quantity at all. I borrowed this one for today.
+                I would not borrow you for anything. I would only keep you, if you will.</em> Rosa said yes before she
+              had finished the sentence.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 5 · ROMANCE TWO-COL (stories 4 & 5) ────── -->
+    <div data-page="5" data-sec="romance">
+      <div class="sec-banner rr">
+        <div class="r"></div><span>❧ &nbsp; Affairs of the Heart — Concluded &nbsp; ❧</span>
+        <div class="r"></div>
+      </div>
+      <div class="row two">
+        <div class="story gr">
+          <div class="genre">Romance &nbsp;·&nbsp; Correspondence</div>
+          <h2 class="hl">PEN PALS DISCOVER AFTER SIX YEARS OF LETTERS THEY LIVE FOUR STREETS APART — RECOGNIZED EACH
+            OTHER'S HANDWRITING BEFORE THEIR FACES</h2>
+          <div class="byl">By Hilde Maas · Social Affairs · Essen</div>
+          <div class="body">
+            <p>Maren and Sol joined Essen's postal correspondence club on the same afternoon in March, six years ago,
+              without knowing it. They were paired by lot number and given only post-box addresses, as the club's
+              tradition required. For six years they wrote about the particular and small: the quality of light on a
+              Tuesday in November, the sound of their respective neighborhoods at six in the morning, a sentence from a
+              book that had lodged in each of them for reasons they couldn't fully explain. They wrote about the bakery
+              on their street. For three years, neither realized it was the same one.</p>
+            <p>At the club's annual gathering, Maren and Sol recognized each other's handwriting on their name tags
+              before they recognized each other's faces. Sol stopped walking. Maren said she knew the moment she saw his
+              name written in his own hand — she had spent six years reading that hand and could not have not known it
+              in any light, in any room, under any circumstances.</p>
+            <div class="pq">"He looked at my name tag and went completely still," Maren said. "I understood why before
+              he said anything. I had been reading his voice for six years. I already knew what it sounded like when he
+              was surprised by something wonderful."</div>
+          </div>
+        </div>
+        <div class="vr"></div>
+        <div class="story gr">
+          <div class="genre">Romance &nbsp;·&nbsp; Astronomy</div>
+          <h2 class="hl">ASTRONOMER SPENT 40 YEARS TRANSMITTING INTO EMPTY SPACE — THE RESPONSE ARRIVED ADDRESSED TO HER
+            BY NAME</h2>
+          <div class="byl">By Cosima Veil · Science &amp; Heart</div>
+          <div class="body">
+            <p>Dr. Vera Lindqvist sent her first transmission at twenty-two: Satie's Gymnopédie No. 1, her own voice
+              reading a poem she had written that afternoon, and the precise coordinates of her grandmother's garden in
+              Uppsala — where she had first understood, at seven years old, that the sky was not a ceiling but a floor
+              pointing somewhere else entirely. She expected nothing back. She was a scientist. She transmitted anyway,
+              once a year, for forty years. Her students called it love.</p>
+            <p>The signal received in 2019 lasted four minutes and twelve seconds. It contained: the Gymnopédie,
+              slightly varied in the third movement, as if someone had been practicing it from memory for a very long
+              time and had developed their own opinion about it. The coordinates of her grandmother's garden. And,
+              encoded in radio-wave binary, her name — Vera — followed by one additional word.</p>
+            <p>Dr. Lindqvist has not disclosed what that word was. She has described it, in three separate interviews,
+              only as "accurate." She has been playing the Gymnopédie more often since. When asked if she will transmit
+              a response, she said: "I already did. Forty years ago. They just got it."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 6 · SCIFI FEATURED ─────────────────────── -->
+    <div data-page="6" data-sec="scifi">
+      <div class="sec-banner sr">
+        <div class="r"></div><span>⟡ &nbsp; Dispatches from Other Continua &nbsp; ⟡</span>
+        <div class="r"></div>
+      </div>
+      <div class="row one">
+        <div class="story feat gs">
+          <div class="genre">Science Fiction &nbsp;·&nbsp; Continuum Studies</div>
+          <div class="photo sc-s" id="scifiScene">
+            <div class="shoot"></div>
+          </div>
+          <h2 class="hl">IN THE UNIVERSE WHERE MUSIC CAME BEFORE LANGUAGE, ALL LAWS ARE WRITTEN IN B-FLAT MINOR — THE
+            GREAT FAMINE ACCORD IS DEVASTATING TO HEAR</h2>
+          <div class="deck">Scholars confirm that in Stratum Seven, legislation is composed rather than drafted. The
+            most moving piece of law ever written is also, by unanimous consensus, the most heartbreaking thing ever put
+            to paper.</div>
+          <div class="byl">By Archive Correspondent · Thessandrian Institute of Parallel Studies · Virentis XIV</div>
+          <div class="body">
+            <p>Scholars at the Thessandrian Archive of Continuum Studies have published their most complete survey to
+              date of Stratum Seven — the universe in which tonal communication preceded verbal language by an estimated
+              four thousand years. Early Stratum Seven humans developed sophisticated musical vocabularies long before
+              they developed words. Grief was a descending minor third. Danger was a repeated flat seventh. Love, most
+              researchers agree, was silence — a precise, attended silence that both parties understood as meaning
+              exactly what it meant.</p>
+            <p>When verbal language finally emerged in Stratum Seven, it was structured around music rather than the
+              reverse. All formal communication — legislation, contracts, judicial rulings, political speeches — is
+              therefore composed in musical key. Minor keys signal matters of consequence; major keys, celebration and
+              resolution; modal keys, ambiguity and philosophical uncertainty. Composers-in-law are among the most
+              respected professionals in Stratum Seven society, trained for twelve years before being permitted to draft
+              binding instruments.</p>
+            <div class="pq">"The Great Famine Accord of their year 1204 was set in B-flat minor," the Archive notes.
+              "Hearing it performed in full is not simply moving. It is — and the panel used this word in their written
+              summary with full awareness of its implications — honest. More honest than any document the panel had
+              encountered in seven years of comparative legal study."</div>
+            <p>Their equivalent of a parliamentary debate is a forty-minute orchestral session. Amendments are submitted
+              as harmonic variations. Dissent is registered by playing in a different key simultaneously, which is
+              considered both a profound artistic statement and a tremendous nuisance to sit through. Two votes are
+              currently before their upper chamber. One is in C major. The other, on the question of water rights, is in
+              D minor, unresolved. It has been in session for nine years.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 7 · SCIFI TWO-COL (stories 2 & 3) ─────── -->
+    <div data-page="7" data-sec="scifi">
+      <div class="sec-banner sr">
+        <div class="r"></div><span>⟡ &nbsp; Dispatches from Other Continua — Continued &nbsp; ⟡</span>
+        <div class="r"></div>
+      </div>
+      <div class="row two">
+        <div class="story gs">
+          <div class="genre">Science Fiction &nbsp;·&nbsp; Technology</div>
+          <h2 class="hl">THE REVERSALIST EMPIRE: WHERE CAMERAS PHOTOGRAPH THE FUTURE — PORTRAITS ARE LEGALLY CLASSIFIED
+            AS MARRIAGE PROPOSALS</h2>
+          <div class="byl">By Temporal Affairs Bureau</div>
+          <div class="body">
+            <p>Citizens of the Reversalist Empire — whose technology operates in reverse temporal sequence due to a
+              manufacturing tradition involving left-handed assembly tools, which reverse the polarity of certain
+              mechanisms — discovered in their year equivalent to 1902 that cameras so assembled display not what was,
+              but what will be. A photograph taken in the Empire shows the subject as they will appear: minutes from
+              now, or years, or — in the case of long-exposure portraits — decades hence, in a room you have not yet
+              seen, with an expression belonging to a moment that has not yet arrived.</p>
+            <p>Photography in the Empire is considered among the most intimate of all acts. Wedding photographs, in
+              which couples see themselves as they will appear at seventy on the day they marry at twenty-five, are
+              universally described as "the most honest ceremony there is." Many couples report that seeing the
+              photographs makes them less afraid. A few report that it changes who they choose.</p>
+            <div class="pq">"To take someone's photograph," the Empire's leading theorist wrote, "is to say: I have
+              looked at your future and I am not frightened by what I found there. That is either a proposal or a
+              profound act of friendship. It is never nothing."</div>
+          </div>
+        </div>
+        <div class="vr"></div>
+        <div class="story gs">
+          <div class="genre">Science Fiction &nbsp;·&nbsp; Governance</div>
+          <h2 class="hl">MOON COLONY 7 ELECTS GOVERNOR WHO HAS NEVER SPOKEN — FIRST OFFICIAL ACT: A SINGLE SENTENCE ON
+            THE COMMUNITY BOARD</h2>
+          <div class="byl">By Luna Bureau Desk · Artemis-7</div>
+          <div class="body">
+            <p>The eight hundred and forty-seven residents of Artemis-7 cast votes in their first independently
+              administered election this cycle. The winner — Cass, thirty-one, systems technician — has not spoken aloud
+              since childhood and ran no campaign in any conventional sense.</p>
+            <p>What Cass did, instead, for one year: sat with colonists during the oxygen shortage, when rationing
+              required each resident to speak thirty percent less to preserve breathable air. Worked double shifts
+              during the hull breach in Sector 4. Wrote one sentence per week on the colony's shared board: <em>The
+                light is different in the eastern corridor on Tuesdays.</em> And: <em>The children have learned to build
+                things that hold.</em> And: <em>I think we are doing better than we know.</em></p>
+            <p>On the morning of the election result, a sixth sentence appeared on the board before anyone else was
+              awake. It read: <em>I will try.</em> The colony's residents have, by informal survey, each read it an
+              average of eleven times. No one has asked what it means. They appear, by all accounts, to already know.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 8 · SCIFI TWO-COL (stories 4 & 5) ─────── -->
+    <div data-page="8" data-sec="scifi">
+      <div class="sec-banner sr">
+        <div class="r"></div><span>⟡ &nbsp; Dispatches from Other Continua — Concluded &nbsp; ⟡</span>
+        <div class="r"></div>
+      </div>
+      <div class="row two">
+        <div class="story gs">
+          <div class="genre">Science Fiction &nbsp;·&nbsp; Architecture</div>
+          <h2 class="hl">WHERE GRAVITY IS OPTIONAL ON TUESDAYS: THE AWARD-WINNING LIBRARY THAT SORTS ITS OWN BOOKS —
+            FICTION ALWAYS DRIFTS TO THE WINDOWS</h2>
+          <div class="byl">By Urban Planning Review · Floating Corridors</div>
+          <div class="body">
+            <p>The Floating Corridor Cities, suspended above the Continental Shelf in universe HV-229, experience a
+              six-hour gravity reduction every Tuesday due to a planetary alignment their physicists describe as
+              "convenient and inexplicable, and we have decided to stop worrying about it." During the Tuesday window,
+              residents, loose furniture, unsecured objects, and the contents of buildings may drift upward by as much
+              as forty meters.</p>
+            <p>This year's civic architecture awards were dominated by libraries. The winner — in Ansen-Four — embedded
+              magnetic genre-tags in the spine of every book in its collection. During Tuesday's uplift, books release
+              from their shelves, sort by subject and emotional register, and return to the correct location without
+              staff intervention. The system requires no power. It requires only the Tuesday.</p>
+            <p>The jury noted one anomaly: fiction, wherever it is replaced during the week, consistently drifts toward
+              the windows during uplift. The architect described it, in his acceptance address, as "the library having
+              an opinion," and said he had decided not to correct it, on the grounds that the library appears to know
+              something he does not.</p>
+          </div>
+        </div>
+        <div class="vr"></div>
+        <div class="story gs">
+          <div class="genre">Science Fiction &nbsp;·&nbsp; Alternate History</div>
+          <h2 class="hl">THE UNIVERSE WITHOUT WAR: THE MOON LANDING WAS A SOURDOUGH STARTER — BERNARD THE
+            THOUSAND-YEAR-OLD DOUGH IS STILL ACTIVE AND BAKES ON THURSDAYS</h2>
+          <div class="byl">By Theta-4 Anthropological Desk</div>
+          <div class="body">
+            <p>Anthropological reports from Continuum Theta-4 confirm that without the development of organized conflict
+              — warfare failed to take root in Theta-4, due to what researchers describe as a "profound early emphasis
+              on grain and an extremely good first harvest in approximately 8,000 BCE that everyone agreed should be
+              protected" — human civilizations redirected what would have been military expenditure into communal ovens,
+              grain cultivation, and the architecture of pastry.</p>
+            <p>Their equivalent of the Eiffel Tower is a four-hundred-metre structure modeled on a croissant, laminated
+              in copper that has turned the precise green of summer fields. Their equivalent of the Moon Landing,
+              achieved in their year 1,204, was the successful cultivation of a sourdough starter kept continuously
+              alive for one thousand years. The starter was named Bernard at year three hundred, by a democratic
+              committee that considered forty-seven other names and rejected them on the grounds that they did not suit
+              him.</p>
+            <div class="pq">"Bernard has survived two floods, one earthquake, a particularly bad summer in 1887, and a
+              brief period in the fourteenth century during which three separate factions each claimed ownership of
+              him," the archive's curator said. "He is resilient. We are very proud of him. He bakes on Thursdays. The
+              bread is extraordinary."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 9 · FUNNY FEATURED ─────────────────────── -->
+    <div data-page="9" data-sec="funny">
+      <div class="sec-banner fr">
+        <div class="r"></div><span>◉ &nbsp; The Lighter Register &nbsp; ◉</span>
+        <div class="r"></div>
+      </div>
+      <div class="row one">
+        <div class="story feat gf">
+          <div class="genre">Humor &nbsp;·&nbsp; Meteorological Affairs</div>
+          <div class="photo sc-f">
+            <div class="star-b sb1">✦</div>
+            <div class="star-b sb2">✧</div>
+            <div class="star-b sb3">✦</div>
+            <div class="cloud"></div>
+          </div>
+          <h2 class="hl">PARLIAMENT OF CLOUDS ISSUES FORMAL RESOLUTION: HUMANS ARE "ADEQUATE" — THREE NIMBOSTRATUS
+            ABSTAINED ON PRINCIPLE AND WERE LATER OBSERVED RAINING ON A WEDDING</h2>
+          <div class="deck">The resolution passed 7,412 to 3. Humanity has been given a provisional approval rating,
+            pending review next century. A subcommittee of altocumulus has been formed to monitor "the situation with
+            the aerosols."</div>
+          <div class="byl">By Meteorological Affairs Desk · High Altitude Correspondent · Virentis XIV</div>
+          <div class="body">
+            <p>After what climate historians estimate to be several centuries of informal deliberation — conducted in
+              the form of weather systems, whose legislative implications no human institution had previously thought to
+              decode — the International Parliament of Clouds convened above the Swiss plateau last Thursday to issue
+              their first formal statement on the question of humanity. The chamber, a formation of cumulonimbus and
+              stratocirrus some forty kilometres across and seventeen kilometres tall, was described by ground observers
+              as "imposing," by one meteorologist as "frankly a bit much," and by a hiking club from Zurich, who were
+              caught beneath it, as "extremely inconsiderate timing."</p>
+            <p>The resolution reads: <em>Humanity is, on balance, adequate. They have interesting hats. Their fires are,
+                on occasion, beautiful. Their music is sometimes acceptable and at other times deeply baffling. Their
+                wars are exhausting and we are persistently asked to provide dramatic backdrop for them, which we find
+                undignified and would prefer to stop. We are, however, on balance, willing to continue. The aerosols
+                remain a concern. This will be reviewed.</em></p>
+            <div class="pq">"The three dissenting nimbostratus," the Institute noted, "have a documented history of
+              strong opinions. They were also responsible for the unseasonal hailstorm at Wimbledon in 2019, the
+              flooding during the outdoor production of Midsummer Night's Dream in Prague in 2021, and what one observer
+              described as 'a very pointed drizzle' over the climate summit of the same year."</div>
+            <p>The Parliament has scheduled its next formal review for the following century, subject to atmospheric
+              conditions. The full text of the resolution is not expected to be fully decoded for another twelve years.
+              "They are clouds. They are not in a hurry," said the Institute's director. "Neither, it turns out, are
+              we."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 10 · FUNNY TWO-COL (stories 2 & 3) ─────── -->
+    <div data-page="10" data-sec="funny">
+      <div class="sec-banner fr">
+        <div class="r"></div><span>◉ &nbsp; The Lighter Register — Continued &nbsp; ◉</span>
+        <div class="r"></div>
+      </div>
+      <div class="row two">
+        <div class="story gf">
+          <div class="genre">Humor &nbsp;·&nbsp; Legal Affairs</div>
+          <h2 class="hl">MAN WINS 14-YEAR LAWSUIT AGAINST HIS OWN SHADOW — SHADOW FILES IMMEDIATE COUNTERSUIT FOR
+            "INCONSISTENT LIGHTING CHOICES AND AESTHETIC NEGLECT"</h2>
+          <div class="byl">By Legal Affairs Desk · Marseille</div>
+          <div class="body">
+            <p>Clement Ruiz, fifty-three, of Marseille, who filed suit in 2010 against his shadow for "following him
+              without consent and reproducing his physical gestures without attribution or compensation," was awarded
+              symbolic damages of one euro by the Sixth Marseille Civil Court on Tuesday. The ruling was delivered by
+              Judge Ariane Petit, who is reported to have sighed three distinct times during the reading of the judgment
+              and once more during the applause.</p>
+            <p>The shadow, represented by the boutique firm Ombre &amp; Associés — which specialises in what its
+              founding partner calls "non-corporeal civil claims, a field I am aware sounds made up and I accept that" —
+              filed a countersuit within forty minutes of the verdict. The suit alleges emotional distress, specifically
+              citing M. Ruiz's "documented and persistent tendency to walk into walls"; his "use of overhead fluorescent
+              bathroom lighting, which the defendant describes as unflattering, continuous, and applied with apparent
+              indifference"; and what the filing terms "a wilful and ongoing neglect of one's own silhouette as a site
+              of aesthetic dignity."</p>
+            <p>Judge Petit has scheduled mediation for the following month. His shadow, it has been noted, will also be
+              present, pending suitable lighting arrangements, which the court has agreed to provide and which have cost
+              more than the awarded damages.</p>
+          </div>
+        </div>
+        <div class="vr"></div>
+        <div class="story gf">
+          <div class="genre">Humor &nbsp;·&nbsp; Municipal Affairs</div>
+          <h2 class="hl">TOWN THAT ACCIDENTALLY BANNED HAPPINESS NOW LEADS ENTIRE REGION IN PRODUCTIVITY — TOURISM HAS
+            TRIPLED, VISITORS DESCRIBE IT AS "A VERY ORGANISED EXHALE"</h2>
+          <div class="byl">By Regional Affairs Desk · Central Bureau</div>
+          <div class="body">
+            <p>Burgerheim, a municipality of six thousand in the central German interior, enacted a public conduct
+              ordinance in 2019 intended to address complaints about noise from outdoor celebrations. The ordinance, as
+              printed, criminalised "excessive emotional radiance in public spaces." The original draft had specified
+              "excessive acoustic radiance." The translation error was not discovered for eleven months, by which point
+              residents had read the ordinance, considered it, and largely complied on the grounds that it seemed, on
+              reflection, reasonable.</p>
+            <p>The results have been, by nearly every measurable standard, excellent. Burgerheim now leads its
+              administrative region in economic productivity, infrastructure maintenance, public transit punctuality,
+              and library book return rates, which stand at ninety-seven point four percent. Tourism has tripled since
+              2021, with visitors describing the town as "the most profoundly reasonable place in Europe," "somewhere
+              that feels like a very organised exhale," and, in one travel review, "the first place I have ever visited
+              that seemed to know what it was doing."</p>
+            <p>The mayor, Rolf Steinmann, was asked by this correspondent whether he is happy with these results. He
+              paused for eleven seconds, looked out the window at the efficiently maintained town square, and said: "I
+              am satisfied." He has declined, for the fifth consecutive year, to correct the ordinance.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 11 · FUNNY TWO-COL (stories 4 & 5) ─────── -->
+    <div data-page="11" data-sec="funny">
+      <div class="sec-banner fr">
+        <div class="r"></div><span>◉ &nbsp; The Lighter Register — Concluded &nbsp; ◉</span>
+        <div class="r"></div>
+      </div>
+      <div class="row two">
+        <div class="story gf">
+          <div class="genre">Humor &nbsp;·&nbsp; Paranormal</div>
+          <h2 class="hl">LOCAL GHOST LEAVES ONE-STAR REVIEW FOR HOUSE HE'S HAUNTED SINCE 1887 — "CURRENT TENANTS
+            ENTIRELY ON THEIR PHONES. AMBIANCE: RUINED."</h2>
+          <div class="byl">By Digital &amp; Spectral Affairs · Edinburgh</div>
+          <div class="body">
+            <p>A property in Edinburgh's New Town district received a one-star review on the hospitality platform Yelp
+              this Thursday, from an account registered under the name "Frederick H., Resident Since 1887." The account
+              has no profile photograph. It has no other reviews. It joined the platform, records indicate, at 3:17 a.m.
+              on Thursday morning. The platform's verification team has confirmed the account is real, and has declined
+              to elaborate on what "real" means in this context.</p>
+            <p>The review reads, in full: <em>Have been haunting this property for one hundred and thirty-seven years.
+                In that time I have appeared in mirrors. I have moved objects from tables to floors. I have produced
+                cold spots on fourteen occasions and unexplained sounds in the attic on eleven more. Previous tenants
+                (1952–1978) were excellent: screamed appropriately, called a vicar, left within the year. Current
+                tenants: entirely on their telephones. I appeared in the bathroom mirror last Tuesday for a full four
+                minutes. Not one of them looked up. Ambiance of the property has been completely ruined by the ring
+                lights. Would not haunt again. One star. I am, I should note, contractually obligated to remain. I have
+                reviewed the terms extensively and there is no exit clause.</em></p>
+            <p>The current tenants said they had always found the cold spots "quite a charming feature" and had been
+              meaning to look into underfloor heating.</p>
+          </div>
+        </div>
+        <div class="vr"></div>
+        <div class="story gf">
+          <div class="genre">Humor &nbsp;·&nbsp; Breaking Domestic</div>
+          <h2 class="hl">DEATH ARRIVES AT WRONG ADDRESS, STAYS FOR TEA, ADMIRES THE CURTAINS, DEPARTS WITH A VERY
+            THOUGHTFUL HANDWRITTEN CONDOLENCE CARD</h2>
+          <div class="byl">By Correspondent at Large</div>
+          <div class="body">
+            <p>Mrs. Eugenia Voss, eighty-one, of number fourteen, answered her front door at eleven-fifteen on Tuesday
+              morning to find Death, who consulted his ledger and immediately admitted, with evident and genuine
+              embarrassment, that he had the wrong address. He had been looking for a Mrs. Eloise Voss of number forty,
+              two streets over. He had misread his own handwriting. "He showed me the ledger," Mrs. Voss told this
+              correspondent. "He was right — it is quite difficult to read. I told him so and he said he was aware of
+              the problem and had been meaning to do something about it for some time."</p>
+            <p>Death came inside, which Mrs. Voss described as "polite of him, under the circumstances." He sat at the
+              kitchen table. He accepted two biscuits. He admired the curtains in the sitting room — hand-embroidered,
+              forty years old — which she found "unexpectedly perceptive." They discussed the garden for approximately
+              fifteen minutes. He said it was very well maintained for the season. She said she had had help. He said he
+              knew, and left a small pause that Mrs. Voss reports she found "not unpleasant."</p>
+            <p>Death left a card before departing. It read: <em>My sincere apologies for the confusion. You will know
+                when it is time. It will not be for a while yet. In the meantime, the garden is genuinely excellent, and
+                those really are very good curtains. Yours, etc.</em> Mrs. Voss has put the card on the mantelpiece. She
+              says it is the most useful piece of correspondence she has received in years.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <!-- ══════════════════════════════════════════════════════
+     STAGE — THE ACTUAL NEWSPAPER CARD
+══════════════════════════════════════════════════════ -->
+  <div id="stage">
+    <div id="card">
+
+      <!-- FRONT FACE -->
+      <div class="face front">
+        <div class="paper">
+
+          <!-- MASTHEAD -->
+          <div class="mast">
+            <div class="mast-top">
+              <span>Vol. XLVII · No. 312</span>
+              <span id="mastDate">Moonday, Virentis XIV · Year of the Hollow Sun</span>
+              <span>Price: Three Coins or One True Secret</span>
+            </div>
+            <div class="mast-title">The Daily Elsewhere</div>
+            <div class="mast-sub">All the News That Isn't &nbsp;—&nbsp; Until It Is &nbsp;·&nbsp; Printed in the Margins
+              of Reality</div>
+          </div>
+
+          <!-- TICKER -->
+          <div class="tick-wrap">
+            <div class="tick-inner">
+              <span class="tick-item">◆ Harrow fog festival records twelve strangers — none of the previous seven have
+                aged</span>
+              <span class="tick-item">◆ Shadow files countersuit; demands outdoor lighting reform</span>
+              <span class="tick-item">◆ Astronomer receives signal from space addressed to her by name</span>
+              <span class="tick-item">◆ Bernard the sourdough celebrates millennium in universe without war</span>
+              <span class="tick-item">◆ Moon Colony 7 governor posts sixth sentence — colony reads it eleven times
+                each</span>
+              <span class="tick-item">◆ Death cited for trespassing; confirms navigational error; admires
+                curtains</span>
+              <span class="tick-item">◆ Ocean floor laughter confirmed — every eleven minutes, undistorted by
+                pressure</span>
+              <span class="tick-item">◆ Clockmaker's wife: "He gave me four more minutes. I would have danced
+                forever."</span>
+              <span class="tick-item">◆ Harrow fog festival records twelve strangers — none of the previous seven have
+                aged</span>
+              <span class="tick-item">◆ Shadow files countersuit; demands outdoor lighting reform</span>
+              <span class="tick-item">◆ Astronomer receives signal from space addressed to her by name</span>
+              <span class="tick-item">◆ Bernard the sourdough celebrates millennium in universe without war</span>
+              <span class="tick-item">◆ Moon Colony 7 governor posts sixth sentence — colony reads it eleven times
+                each</span>
+              <span class="tick-item">◆ Death cited for trespassing; confirms navigational error; admires
+                curtains</span>
+              <span class="tick-item">◆ Ocean floor laughter confirmed — every eleven minutes, undistorted by
+                pressure</span>
+              <span class="tick-item">◆ Clockmaker's wife: "He gave me four more minutes. I would have danced
+                forever."</span>
+            </div>
+          </div>
+
+          <!-- PAGE CONTENT (scrollable) -->
+          <div class="page-content" id="pageContent"></div>
+
+          <!-- FOOTER -->
+          <div class="paper-foot">
+            <span>© The Daily Elsewhere · All Rights Reserved in This and Adjacent Realities</span>
+            <span class="scroll-ind" id="scrollInd">↓ scroll for more</span>
+            <span id="pageLabel">Page 1 of 12</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- BACK FACE -->
+      <div class="face back">
+        <div class="bkpaper">
+          <div class="bkborder"></div>
+          <div class="bkorn" style="top:18px;left:18px">✦</div>
+          <div class="bkorn" style="top:18px;right:18px">✦</div>
+          <div class="bkorn" style="bottom:18px;left:18px">✦</div>
+          <div class="bkorn" style="bottom:18px;right:18px">✦</div>
+          <div class="bkinner">
+            <div class="bktitle">The Daily Elsewhere</div>
+            <div class="bkrule"></div>
+            <div class="bkmsg" id="bkmsg">Turning the Page...</div>
+            <div class="bkednum" id="bkednum">Page 2 of 12</div>
+            <div class="bkspin">✦</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div id="controls">
+    <button id="btnflip">◆ &nbsp; Next Edition &nbsp; ◆</button>
+    <span class="edctr" id="edctr">SPACE · →</span>
+  </div>
+
+  <script>
+    /* ════════════════════════════════════════
+       CONSTANTS
+    ════════════════════════════════════════ */
+    const TOTAL_PAGES = 12;
+    let pageIdx = 0;
+    let flipping = false;
+    let floatTween = null;
+
+    /* ════════════════════════════════════════
+       AUDIO (SFX)
+    ════════════════════════════════════════ */
+    const SFX = (function () {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return { playFlip: () => { }, playScroll: () => { }, setAmbiance: () => { }, initAll: () => { }, setVol: () => { } };
+      let ctx = null;
+
+      let sfxVol = 0.8;
+      let ambVol = 0.4;
+
+      let masterAmbGain = null;
+      let ambOsc1, ambOsc2, ambNoise;
+      let ambGain1, ambGain2, ambNoiseGain;
+      let currentGenre = '';
+
+      function initCtx() {
+        if (!ctx) {
+          ctx = new AudioCtx();
+          masterAmbGain = ctx.createGain();
+          masterAmbGain.gain.value = ambVol;
+          masterAmbGain.connect(ctx.destination);
+          setupAmbianceNodes();
+        }
+        if (ctx.state === 'suspended') ctx.resume();
+      }
+
+      function setupAmbianceNodes() {
+        // Osc 1 (Low drone)
+        ambOsc1 = ctx.createOscillator();
+        ambGain1 = ctx.createGain();
+        ambGain1.gain.value = 0;
+        ambOsc1.connect(ambGain1);
+        ambGain1.connect(masterAmbGain);
+        ambOsc1.start();
+
+        // Osc 2 (High/Mid drone)
+        ambOsc2 = ctx.createOscillator();
+        ambGain2 = ctx.createGain();
+        ambGain2.gain.value = 0;
+        ambOsc2.connect(ambGain2);
+        ambGain2.connect(masterAmbGain);
+        ambOsc2.start();
+
+        // Noise
+        const bSize = ctx.sampleRate * 2;
+        const buf = ctx.createBuffer(1, bSize, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < bSize; i++) data[i] = Math.random() * 2 - 1;
+        ambNoise = ctx.createBufferSource();
+        ambNoise.buffer = buf;
+        ambNoise.loop = true;
+
+        const noiseFilter = ctx.createBiquadFilter();
+        noiseFilter.type = 'lowpass';
+        noiseFilter.frequency.value = 400;
+        ambNoise.connect(noiseFilter);
+
+        ambNoiseGain = ctx.createGain();
+        ambNoiseGain.gain.value = 0;
+        noiseFilter.connect(ambNoiseGain);
+        ambNoiseGain.connect(masterAmbGain);
+        ambNoise.start();
+      }
+
+      function transitionGain(node, val, time) {
+        if (!node) return;
+        node.gain.cancelScheduledValues(ctx.currentTime);
+        node.gain.linearRampToValueAtTime(val, ctx.currentTime + time);
+      }
+      function transitionFreq(param, val, time) {
+        if (!param) return;
+        param.cancelScheduledValues(ctx.currentTime);
+        param.linearRampToValueAtTime(val, ctx.currentTime + time);
+      }
+
+      let lastScroll = 0;
+      function playScroll() {
+        initCtx();
+        const now = ctx.currentTime;
+        if (now - lastScroll < 0.06) return;
+        lastScroll = now;
+
+        const bSize = ctx.sampleRate * 0.06;
+        const buf = ctx.createBuffer(1, bSize, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < bSize; i++) data[i] = Math.random() * 2 - 1;
+
+        const noise = ctx.createBufferSource();
+        noise.buffer = buf;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.value = 800;
+        filter.Q.value = 0.5;
+
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.12 * sfxVol, now + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+        noise.start(now);
+      }
+
+      function playFlip() {
+        initCtx();
+        const now = ctx.currentTime;
+
+        // 1. Initial crisp snap (paper detaching/bending) Highpass noise burst
+        const bSize = ctx.sampleRate * 0.05;
+        const buf = ctx.createBuffer(1, bSize, ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < bSize; i++) data[i] = Math.random() * 2 - 1;
+        const snap = ctx.createBufferSource();
+        snap.buffer = buf;
+        const snapFilt = ctx.createBiquadFilter();
+        snapFilt.type = 'highpass';
+        snapFilt.frequency.value = 3000;
+        const snapGain = ctx.createGain();
+        snapGain.gain.setValueAtTime(0, now);
+        snapGain.gain.linearRampToValueAtTime(1.8 * sfxVol, now + 0.005);
+        snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+        snap.connect(snapFilt); snapFilt.connect(snapGain); snapGain.connect(ctx.destination);
+        snap.start(now);
+
+        // 2. The air swish (paper moving through air) Bandpass sweep
+        const bSize2 = ctx.sampleRate * 0.25;
+        const buf2 = ctx.createBuffer(1, bSize2, ctx.sampleRate);
+        const data2 = buf2.getChannelData(0);
+        for (let i = 0; i < bSize2; i++) data2[i] = Math.random() * 2 - 1;
+        const swish = ctx.createBufferSource();
+        swish.buffer = buf2;
+        const swishFilt = ctx.createBiquadFilter();
+        swishFilt.type = 'bandpass';
+        swishFilt.Q.value = 1.0;
+        swishFilt.frequency.setValueAtTime(1200, now + 0.02);
+        swishFilt.frequency.exponentialRampToValueAtTime(200, now + 0.25);
+        const swishGain = ctx.createGain();
+        swishGain.gain.setValueAtTime(0, now + 0.02);
+        swishGain.gain.linearRampToValueAtTime(1.2 * sfxVol, now + 0.06);
+        swishGain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        swish.connect(swishFilt); swishFilt.connect(swishGain); swishGain.connect(ctx.destination);
+        swish.start(now + 0.02);
+
+        // 3. The page landing (low frequency thud) Triangle wave pitch drop
+        const thud = ctx.createOscillator();
+        thud.type = 'triangle';
+        thud.frequency.setValueAtTime(120, now + 0.12);
+        thud.frequency.exponentialRampToValueAtTime(30, now + 0.22);
+        const thudGain = ctx.createGain();
+        thudGain.gain.setValueAtTime(0, now + 0.12);
+        thudGain.gain.linearRampToValueAtTime(1.5 * sfxVol, now + 0.14);
+        thudGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        thud.connect(thudGain); thudGain.connect(ctx.destination);
+        thud.start(now + 0.12);
+        thud.stop(now + 0.23);
+      }
+
+      return {
+        initAll: () => initCtx(),
+        setVol: (type, val) => {
+          if (type === 'sfx') sfxVol = val;
+          if (type === 'amb') {
+            ambVol = val;
+            if (masterAmbGain) masterAmbGain.gain.setValueAtTime(val, ctx.currentTime);
+          }
+        },
+        setAmbiance: (sec) => {
+          if (!ctx) return;
+          if (currentGenre === sec) return;
+          currentGenre = sec;
+
+          if (sec === 'horror') {
+            ambOsc1.type = 'sine'; transitionFreq(ambOsc1.frequency, 45, 1);
+            ambOsc2.type = 'sine'; transitionFreq(ambOsc2.frequency, 47, 1);
+            transitionGain(ambGain1, 0.7, 2);
+            transitionGain(ambGain2, 0.7, 2);
+            transitionGain(ambNoiseGain, 0.4, 2);
+          } else if (sec === 'romance') {
+            ambOsc1.type = 'sine'; transitionFreq(ambOsc1.frequency, 261.63, 1);
+            ambOsc2.type = 'sine'; transitionFreq(ambOsc2.frequency, 329.63, 1);
+            transitionGain(ambGain1, 0.15, 2);
+            transitionGain(ambGain2, 0.15, 2);
+            transitionGain(ambNoiseGain, 0.0, 2);
+          } else if (sec === 'scifi') {
+            ambOsc1.type = 'sawtooth'; transitionFreq(ambOsc1.frequency, 65.41, 1);
+            ambOsc2.type = 'sine'; transitionFreq(ambOsc2.frequency, 1046.50, 1);
+            transitionGain(ambGain1, 0.08, 2);
+            transitionGain(ambGain2, 0.04, 2);
+            transitionGain(ambNoiseGain, 0.2, 2);
+          } else {
+            transitionGain(ambGain1, 0.0, 2);
+            transitionGain(ambGain2, 0.0, 2);
+            transitionGain(ambNoiseGain, 0.0, 2);
+          }
+        },
+        playFlip: playFlip,
+        playScroll: playScroll
+      };
+    })();
+
+    /* ════════════════════════════════════════
+       DUST PARTICLES — from old file
+    ════════════════════════════════════════ */
+    function createDust() {
+      for (let i = 0; i < 16; i++) {
+        const d = document.createElement('div');
+        const sz = .7 + Math.random() * 1.9;
+        d.className = 'dust';
+        d.style.cssText = `width:${sz}px;height:${sz}px;` +
+          `background:rgba(255,185,70,${.055 + Math.random() * .11});` +
+          `left:${Math.random() * 100}%;top:${Math.random() * 100}%;` +
+          `animation-duration:${9 + Math.random() * 18}s;` +
+          `animation-delay:-${Math.random() * 22}s`;
+        document.body.appendChild(d);
+      }
+    }
+
+    /* ════════════════════════════════════════
+       ATMOSPHERE — from current file
+    ════════════════════════════════════════ */
+    const ATM_BG = {
+      horror: '#08010302', romance: '#0f030820', scifi: '#02040820', funny: '#100a0220'
+    };
+    const BODY_BG = {
+      horror: '#060202', romance: '#0a0205', scifi: '#020408', funny: '#0c0802'
+    };
+    const atm = document.getElementById('atm');
+    let currentSec = '';
+    let atmInterval = null;
+
+    function setAtmosphere(sec) {
+      if (sec === currentSec) return;
+      currentSec = sec;
+      document.body.style.background = BODY_BG[sec] || '#060402';
+      atm.innerHTML = '';
+      clearInterval(atmInterval);
+      atmInterval = null;
+      buildParticles(sec);
+    }
+
+    function buildParticles(sec) {
+      if (sec === 'horror') {
+        for (let i = 0; i < 14; i++) addMist();
+      } else if (sec === 'romance') {
+        for (let i = 0; i < 18; i++) addPetal(Math.random() * -80);
+        atmInterval = setInterval(() => addPetal(-4), 600);
+      } else if (sec === 'scifi') {
+        for (let i = 0; i < 70; i++) addStarBg();
+      } else if (sec === 'funny') {
+        for (let i = 0; i < 22; i++) addConfetti(Math.random() * -60);
+        atmInterval = setInterval(() => addConfetti(-3), 400);
+      }
+    }
+
+    function addMist() {
+      const d = document.createElement('div');
+      const sz = 40 + Math.random() * 90;
+      d.style.cssText = `position:absolute;width:${sz}px;height:${sz}px;` +
+        `left:${Math.random() * 100}%;top:${Math.random() * 100}%;border-radius:50%;` +
+        `background:radial-gradient(circle,rgba(100,0,0,.22),transparent 70%);` +
+        `filter:blur(${12 + Math.random() * 10}px);` +
+        `animation:mist-float ${7 + Math.random() * 9}s ${Math.random() * 5}s ease-in-out infinite;`;
+      atm.appendChild(d);
+    }
+
+    function addPetal(startTop) {
+      const d = document.createElement('div');
+      const sz = 10 + Math.random() * 12;
+      const chars = ['✿', '❀', '❋', '✾', '✼'];
+      const drift = (Math.random() - .5) * 120;
+      const dur = 9 + Math.random() * 10;
+      const hue = 320 + Math.random() * 30;
+      d.style.cssText = `position:absolute;left:${Math.random() * 100}%;top:${startTop}%;` +
+        `font-size:${sz}px;color:hsl(${hue},75%,${62 + Math.random() * 18}%);opacity:0;` +
+        `--drift:${drift}px;pointer-events:none;` +
+        `animation:petal-fall ${dur}s ${Math.random() * 2}s linear forwards;`;
+      d.textContent = chars[Math.floor(Math.random() * chars.length)];
+      atm.appendChild(d);
+      setTimeout(() => d.remove(), (dur + 2) * 1000);
+    }
+
+    function addStarBg() {
+      const d = document.createElement('div');
+      const sz = .8 + Math.random() * 2;
+      d.style.cssText = `position:absolute;left:${Math.random() * 100}%;top:${Math.random() * 100}%;` +
+        `width:${sz}px;height:${sz}px;border-radius:50%;` +
+        `background:${Math.random() > .75 ? '#a0c0ff' : '#ffffff'};` +
+        `animation:star-twinkle ${1.5 + Math.random() * 4}s ${Math.random() * 3}s ease-in-out infinite;`;
+      atm.appendChild(d);
+    }
+
+    function addConfetti(startTop) {
+      const d = document.createElement('div');
+      const sz = 5 + Math.random() * 8;
+      const colors = ['#ff6b35', '#ffd700', '#ff69b4', '#7fff00', '#87ceeb', '#ff9f43'];
+      const drift = (Math.random() - .5) * 100;
+      const rot = 200 + Math.random() * 400;
+      const dur = 6 + Math.random() * 8;
+      d.style.cssText = `position:absolute;left:${Math.random() * 100}%;top:${startTop}%;` +
+        `width:${sz}px;height:${sz}px;` +
+        `background:${colors[Math.floor(Math.random() * colors.length)]};` +
+        `border-radius:${Math.random() > .5 ? '50%' : '2px'};opacity:0;` +
+        `--drift:${drift}px;--rot:${rot}deg;pointer-events:none;` +
+        `animation:confetti-fall ${dur}s ${Math.random() * 2}s linear forwards;`;
+      atm.appendChild(d);
+      setTimeout(() => d.remove(), (dur + 2) * 1000);
+    }
+
+    /* ════════════════════════════════════════
+       SCIFI STARS INJECTION
+    ════════════════════════════════════════ */
+    function buildScifiStars(el) {
+      // clear any injected stars
+      el.querySelectorAll('.sstar').forEach(s => s.remove());
+      for (let i = 0; i < 22; i++) {
+        const s = document.createElement('div');
+        s.className = 'sstar';
+        const sz = .8 + Math.random() * 1.8;
+        s.style.cssText = `left:${Math.random() * 100}%;top:${Math.random() * 100}%;` +
+          `width:${sz}px;height:${sz}px;` +
+          `--sd:${1.2 + Math.random() * 3.5}s;--sdl:${Math.random() * 2}s;`;
+        el.appendChild(s);
+      }
+    }
+
+    /* ════════════════════════════════════════
+       APPLY PAGE
+    ════════════════════════════════════════ */
+    function applyPage(idx) {
+      const tpl = document.querySelector(`[data-page="${idx}"]`);
+      if (!tpl) return;
+      const pc = document.getElementById('pageContent');
+      pc.innerHTML = tpl.innerHTML;
+      pc.scrollTop = 0;
+
+      // inject stars into scifi scene if present
+      const scifi = pc.querySelector('.sc-s');
+      if (scifi) buildScifiStars(scifi);
+
+      // atmosphere
+      setAtmosphere(tpl.dataset.sec);
+      SFX.setAmbiance(tpl.dataset.sec);
+
+      // update labels
+      document.getElementById('pageLabel').textContent = `Page ${idx + 1} of ${TOTAL_PAGES}`;
+      document.getElementById('edctr').textContent = `Page ${idx + 1} of ${TOTAL_PAGES} · SPACE`;
+
+      // scroll indicator
+      const ind = document.getElementById('scrollInd');
+      // show indicator only if content overflows
+      setTimeout(() => {
+        ind.style.opacity = (pc.scrollHeight > pc.clientHeight) ? '1' : '0';
+      }, 100);
+
+      pc.addEventListener('scroll', () => {
+        ind.style.opacity = '0';
+      }, { once: true });
+    }
+
+    /* ════════════════════════════════════════
+       REVEAL ANIMATION
+    ════════════════════════════════════════ */
+    function reveal() {
+      const els = document.getElementById('pageContent').querySelectorAll(
+        '.sec-banner,.genre,.hl,.deck,.byl,.body p,.pq'
+      );
+      gsap.fromTo(els,
+        { opacity: 0, y: 6 },
+        { opacity: 1, y: 0, duration: .35, stagger: .018, ease: 'power2.out' }
+      );
+    }
+
+    /* ════════════════════════════════════════
+       FLOAT TWEEN — from old file
+    ════════════════════════════════════════ */
+    function startFloat() {
+      floatTween?.kill();
+      floatTween = gsap.to('#card', { y: -7, duration: 3.8, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    }
+
+    /* ════════════════════════════════════════
+       FLIP — from old file
+    ════════════════════════════════════════ */
+    async function flipNext() {
+      SFX.playFlip();
+      if (flipping) return;
+      flipping = true;
+      document.getElementById('btnflip').disabled = true;
+      const card = document.getElementById('card');
+      floatTween?.kill();
+
+      const nextIdx = (pageIdx + 1) % TOTAL_PAGES;
+      document.getElementById('bkmsg').textContent = 'Turning the Page...';
+      document.getElementById('bkednum').textContent = `Page ${nextIdx + 1} of ${TOTAL_PAGES}`;
+
+      // lift + first half flip
+      await new Promise(res => {
+        gsap.timeline({ onComplete: res })
+          .to(card, { duration: .22, rotateX: 7, y: -16, ease: 'power2.in' })
+          .to(card, { duration: .78, rotateY: 180, rotateX: 2, ease: 'power2.inOut' });
+      });
+
+      // swap content while on back face
+      await new Promise(r => setTimeout(r, 240));
+      pageIdx = nextIdx;
+      applyPage(pageIdx);
+
+      // second half flip
+      await new Promise(res => {
+        gsap.timeline({ onComplete: res })
+          .to(card, { duration: .78, rotateY: 360, rotateX: 4, ease: 'power2.in' })
+          .to(card, { duration: .26, rotateX: 2.5, rotateZ: -.3, y: 0, ease: 'power2.out' });
+      });
+
+      gsap.set(card, { rotateY: 0, rotateX: 2.5, rotateZ: -.3, y: 0 });
+      reveal();
+      startFloat();
+      document.getElementById('btnflip').disabled = false;
+      flipping = false;
+    }
+
+    /* ════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════ */
+    function init() {
+      createDust();
+      gsap.set('#card', { rotateX: 2.5, rotateZ: -.3 });
+
+      // initial page load setup (fade handled by loader)
+      gsap.set('#pageContent', { opacity: 0 });
+      applyPage(0);
+
+      // Loader Logic
+      window.addEventListener('load', () => {
+        document.getElementById('load-text').textContent = "Reality Assembled";
+        document.getElementById('btn-enter').classList.add('ready');
+      });
+      // Fallback if window already loaded
+      if (document.readyState === 'complete') {
+        document.getElementById('load-text').textContent = "Reality Assembled";
+        document.getElementById('btn-enter').classList.add('ready');
+      }
+
+      document.getElementById('btn-enter').addEventListener('click', () => {
+        SFX.initAll();
+        gsap.to('#loader', {
+          opacity: 0, duration: 0.8, onComplete: () => {
+            document.getElementById('loader').style.display = 'none';
+            SFX.setAmbiance(currentSec);
+          }
+        });
+        setTimeout(() => {
+          gsap.to('#pageContent', { opacity: 1, duration: .6, ease: 'power2.out' });
+          reveal();
+        }, 100);
+        startFloat();
+      });
+
+      // Volume Logic
+      const vbtn = document.getElementById('vol-btn');
+      const vpan = document.getElementById('vol-panel');
+      vbtn.addEventListener('click', () => vpan.classList.toggle('open'));
+      document.getElementById('volSFX').addEventListener('input', e => SFX.setVol('sfx', parseFloat(e.target.value)));
+      document.getElementById('volAmb').addEventListener('input', e => SFX.setVol('amb', parseFloat(e.target.value)));
+
+      document.getElementById('btnflip').addEventListener('click', flipNext);
+      document.addEventListener('keydown', e => {
+        if (e.key === ' ' || e.key === 'ArrowRight') { e.preventDefault(); flipNext(); }
+      });
+      document.getElementById('pageContent').addEventListener('scroll', () => {
+        SFX.playScroll();
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+
+</html>
